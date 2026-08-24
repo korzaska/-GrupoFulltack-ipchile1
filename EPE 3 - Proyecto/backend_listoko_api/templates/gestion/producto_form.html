@@ -1,0 +1,26 @@
+{% extends "gestion/base.html" %}
+{% block title %}Nuevo producto — Bodega{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<h2>Nuevo producto</h2>
+
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label>{{ field.label }}:</label>
+            {{ field }}
+            {% if field.errors %}
+                <div style="color:red; font-size:0.85rem; margin-top:4px">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-green">Guardar</button>
+            <a href="/productos/" class="btn btn-dark">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

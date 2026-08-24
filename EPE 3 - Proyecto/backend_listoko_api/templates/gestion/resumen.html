@@ -1,0 +1,85 @@
+{% extends "gestion/base.html" %}
+{% block title %}Resumen — Bodega{% endblock %}
+{% block nav_resumen %}active{% endblock %}
+
+{% block content %}
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="label">Productos activos</div>
+        <div class="value">{{ total_productos }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">Categorias</div>
+        <div class="value">{{ total_categorias }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="label">Stock total registrado</div>
+        <div class="value">{{ stock_total }}</div>
+    </div>
+</div>
+
+<div class="btn-row">
+    <a href="/movimientos/nuevo/" class="btn btn-green">Registrar movimiento</a>
+    <a href="/productos/nuevo/" class="btn btn-dark">Nuevo producto</a>
+</div>
+
+<div class="table-card">
+    <h3>Resumen por categoria</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Productos</th>
+                <th>Stock total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cat in resumen_categorias %}
+            <tr>
+                <td>{{ cat.nombre }}</td>
+                <td>{{ cat.productos }}</td>
+                <td>
+                    {% if cat.stock > 0 %}
+                        <span class="stock-ok">{{ cat.stock }}</span>
+                    {% else %}
+                        <span class="stock-zero">{{ cat.stock }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-card">
+    <h3>Ultimos movimientos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in ultimos_movimientos %}
+            <tr>
+                <td>{{ m.fecha|date:"d/m/Y H:i" }}</td>
+                <td>{{ m.producto.nombre }}</td>
+                <td>
+                    {% if m.tipo == 'ENTRADA' %}
+                        <span class="badge-entrada">Entrada</span>
+                    {% else %}
+                        <span class="badge-salida">Salida</span>
+                    {% endif %}
+                </td>
+                <td>{{ m.cantidad }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" style="text-align:center; color:#999; padding:20px">Sin movimientos registrados</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

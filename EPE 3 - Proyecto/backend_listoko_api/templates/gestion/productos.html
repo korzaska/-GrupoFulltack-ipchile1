@@ -1,0 +1,59 @@
+{% extends "gestion/base.html" %}
+{% block title %}Productos — Bodega{% endblock %}
+{% block nav_productos %}active{% endblock %}
+
+{% block content %}
+<h2>Productos de bodega</h2>
+
+<a href="/productos/nuevo/" class="btn btn-green" style="margin-bottom:16px; display:inline-block">Nuevo producto</a>
+
+<div class="filtros">
+    <form method="get" style="display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap">
+        <div class="filtro-group">
+            <label>Buscar</label>
+            <input type="text" name="q" value="{{ q }}" placeholder="Nombre del producto">
+        </div>
+        <div class="filtro-group">
+            <label>Categoria</label>
+            <select name="categoria">
+                <option value="">Todas</option>
+                {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if categoria_id == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn-filtrar">Filtrar</button>
+    </form>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Producto</th>
+                <th>Categoria</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td>{{ p.codigo }}</td>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.categoria.nombre|default:"—" }}</td>
+                <td>
+                    {% if p.stock_actual > 0 %}
+                        <span class="stock-ok">{{ p.stock_actual }}</span>
+                    {% else %}
+                        <span class="stock-zero">{{ p.stock_actual }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" style="text-align:center; color:#999; padding:20px">No se encontraron productos</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "gestion/base.html" %}
+{% block title %}Movimientos — Bodega{% endblock %}
+{% block nav_movimientos %}active{% endblock %}
+
+{% block content %}
+<h2>Movimientos de inventario</h2>
+
+<a href="/movimientos/nuevo/" class="btn btn-green" style="margin-bottom:16px; display:inline-block">Registrar movimiento</a>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in movimientos %}
+            <tr>
+                <td>{{ m.fecha|date:"d/m/Y H:i" }}</td>
+                <td>{{ m.producto.nombre }}</td>
+                <td>
+                    {% if m.tipo == 'ENTRADA' %}
+                        <span class="badge-entrada">Entrada</span>
+                    {% else %}
+                        <span class="badge-salida">Salida</span>
+                    {% endif %}
+                </td>
+                <td>{{ m.cantidad }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" style="text-align:center; color:#999; padding:20px">Sin movimientos registrados</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
